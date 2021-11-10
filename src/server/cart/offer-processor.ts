@@ -52,9 +52,9 @@ export class SimpleOfferProcessor implements OffersProcessor {
             hasItem(leftoverItems, offer.itemOnOffer, 1)
 
       let amount = 0
-      const newPrice = leftoverItems[offer.itemOnOffer].price * offer.priceModifier
 
       while (canApplyOffer()) {
+        const newPrice = leftoverItems[offer.itemOnOffer].price * offer.priceModifier
         leftoverItems[offer.requiredItem].quantity -= offer.requiredCount
         processedItems[offer.requiredItem] = {
           price: isSelfOffer ? newPrice : leftoverItems[offer.requiredItem].price,
@@ -77,7 +77,7 @@ export class SimpleOfferProcessor implements OffersProcessor {
     }
 
     return {
-      offersApplied,
+      offersApplied: offersApplied.filter(({ amount }) => amount > 0),
       processedItems,
       leftoverItems,
     }

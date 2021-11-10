@@ -115,6 +115,26 @@ describe('output', () => {
     expect(output.total).toEqual(price1 * 5 + price2 + price2 * 2 * priceModifier1 + price3 * 3 * priceModifier2)
   })
 
+  it('does not list offer if did not apply', () => {
+    const price = 100
+    const items: ItemCollection = { NotApple: { price, quantity: 1 } }
+    const priceModifier = 0.9
+    const offer: Offer = {
+      name: '10% off apples',
+      requiredItem: 'Apple',
+      requiredCount: 1,
+      itemOnOffer: 'Apple',
+      priceModifier,
+    }
+
+    const sut = new SimpleCartProcessor(new SimpleOfferProcessor([offer]), opt)
+
+    const stubCart = dummyCart(items)
+    const output = sut.process(stubCart)
+
+    expect(output.offersApplied).toHaveLength(0)
+  })
+
   it('calculates vat', () => {
     const price = 100
     const quantity = 10
