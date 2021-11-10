@@ -1,0 +1,16 @@
+[
+  {
+    "name": "chocolate 10% off",
+    "requiredItem": "chocolate",
+    "requiredCount": 1,
+    "itemOnOffer": "chocolate",
+    "priceModifier": 0.9
+  },
+  {
+    "name": "buy 2 apples get banana half price",
+    "requiredItem": "apple",
+    "requiredCount": 1,
+    "itemOnOffer": "banana",
+    "priceModifier": 0.5
+  }
+]

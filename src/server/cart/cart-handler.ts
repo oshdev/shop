@@ -1,4 +1,4 @@
-import InMemoryCart, { Cart, CartItem } from '../cart/cart'
+import InMemoryCart, { Cart, CartItem } from './cart'
 import items from '../items/items.json'
 import { Item } from '../items/items-handler'
 
@@ -14,7 +14,7 @@ type EmptyAction = {
 type CartHandler = (action: CartAction) => CartItem[]
 type CartHandlerFactory = (cart: Cart, items: Item[]) => CartHandler
 
-const cart = new InMemoryCart()
+export const cart = new InMemoryCart()
 
 export const handlerFactory: CartHandlerFactory =
   (cart, items): CartHandler =>
