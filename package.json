@@ -7,7 +7,8 @@
     "start": "next start",
     "lint": "eslint '**/*.ts?(x)' --color --ignore-path .gitignore --cache",
     "lint:fix": "eslint '**/*.ts?(x)' --color --ignore-path .gitignore --cache --fix",
-    "test": "jest"
+    "test": "jest",
+    "typecheck": "tsc"
   },
   "dependencies": {
     "next": "12.0.3",
