@@ -1,9 +1,6 @@
 import { OfferApplied, OffersProcessor } from './offer-processor'
+import { Item } from '../items/items-handler'
 
-export interface Item {
-  name: string
-  price: number
-}
 export interface CartItem {
   itemName: string
   quantity: number

@@ -1,4 +1,5 @@
-import { Item, ItemCollection } from './cart'
+import { ItemCollection } from './cart'
+import { Item } from '../items/items-handler'
 
 export interface OfferApplied {
   offer: Offer['name']

@@ -1,5 +1,6 @@
-import InMemoryCart, { Cart, CartOptions, Item, ItemCollection, SimpleCartProcessor } from './cart'
+import InMemoryCart, { Cart, CartOptions, ItemCollection, SimpleCartProcessor } from './cart'
 import { Offer, OffersProcessor, SimpleOfferProcessor } from './offer-processor'
+import { Item } from '../items/items-handler'
 
 describe('In Memory Cart', () => {
   const opt: CartOptions = { vat: 0 }

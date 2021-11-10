@@ -1,5 +1,6 @@
-import InMemoryCart, { Cart, CartItem, Item } from '../cart/cart'
+import InMemoryCart, { Cart, CartItem } from '../cart/cart'
 import items from '../items/items.json'
+import { Item } from '../items/items-handler'
 
 type CartAction = AddAction | EmptyAction
 type AddAction = {
