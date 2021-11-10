@@ -7,4 +7,8 @@ describe('items collection', () => {
   it('returns list of items', async () => {
     await server.get('/api/items').expect(200, items)
   })
+
+  it('handles not allowed HTTP method', async () => {
+    await server.post('/api/items').expect(405)
+  })
 })
