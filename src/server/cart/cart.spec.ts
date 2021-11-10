@@ -8,7 +8,9 @@ describe('In Memory Cart', () => {
   })
   const dummyCart: (items?: ItemCollection) => Cart = (items: ItemCollection = {}) => ({
     add: jest.fn(),
-    getItems: jest.fn(() => items),
+    getCollection: jest.fn(() => items),
+    getItems: jest.fn(),
+    empty: jest.fn(),
   })
 
   it('allows to add a single item', () => {
@@ -31,7 +33,7 @@ describe('In Memory Cart', () => {
     sut.add(item, 2)
   })
 
-  it('returns items', () => {
+  it('returns item collection', () => {
     const price = 123
     const name = 'Apple'
     const quantity = 2
@@ -44,7 +46,23 @@ describe('In Memory Cart', () => {
     const sut = new InMemoryCart()
     sut.add(item, quantity)
 
-    expect(sut.getItems()).toEqual({ [name]: { price, quantity } })
+    expect(sut.getCollection()).toEqual({ [name]: { price, quantity } })
+  })
+
+  it('returns cart items', () => {
+    const price = 123
+    const name = 'Apple'
+    const quantity = 2
+
+    const item: Item = {
+      name,
+      price,
+    }
+
+    const sut = new InMemoryCart()
+    sut.add(item, quantity)
+
+    expect(sut.getItems()).toEqual([{ itemName: name, quantity }])
   })
 
   describe('output', () => {

@@ -1,21 +1,36 @@
-import InMemoryCart, { Cart, Item } from '../cart/cart'
+import InMemoryCart, { Cart, CartItem, Item } from '../cart/cart'
 import items from '../items/items.json'
 
-type CartHandler = (itemName: Item['name'], quantity: number) => void
+type CartAction = AddAction | EmptyAction
+type AddAction = {
+  type: 'add'
+  itemName: Item['name']
+  quantity: number
+}
+type EmptyAction = {
+  type: 'empty'
+}
+type CartHandler = (action: CartAction) => CartItem[]
 type CartHandlerFactory = (cart: Cart, items: Item[]) => CartHandler
 
 const cart = new InMemoryCart()
 
 export const handlerFactory: CartHandlerFactory =
   (cart, items): CartHandler =>
-  (itemName, quantity) =>
-    handler(cart, items, itemName, quantity)
+  (action: CartAction) =>
+    handler(cart, items, action)
 
-const handler = (cart: Cart, items: Item[], itemName: Item['name'], quantity: number) => {
-  const item = items.find((i) => i.name === itemName)
+const handler = (cart: Cart, items: Item[], action: CartAction): CartItem[] => {
+  if (action.type === 'empty') {
+    cart.empty()
+    return []
+  }
+
+  const item = items.find((i) => i.name === action.itemName)
   if (!item) throw new Error('item not found')
 
-  cart.add(item!, quantity)
+  cart.add(item!, action.quantity)
+  return cart.getItems()
 }
 
 const cartHandler: CartHandler = handlerFactory(cart, items)
