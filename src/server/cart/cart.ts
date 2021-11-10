@@ -5,38 +5,33 @@ export interface Item {
 
 export interface Cart {
   add(item: Item, quantity: number): void
+  getItems(): ItemCollection
   produceOutput(): CartOutput
 }
 
 export interface CartOptions {
   vat: number
-  discounts: Discount[]
+  offers: Offer[]
 }
 
 export interface CartOutput {
   items: ItemCollection
-  discountsApplied: DiscountApplied[]
+  offersApplied: OfferApplied[]
   vatApplied: VatApplied
   total: number
 }
 
-interface DiscountApplied {
-  discount: Discount['name']
+interface OfferApplied {
+  offer: Offer['name']
   amount: number
 }
 
-export interface Discount {
+export interface Offer {
   name: string
   requiredItem: Item['name']
   requiredCount: number
-  discountedItem: Item['name']
+  itemOnOffer: Item['name']
   priceModifier: number
-}
-
-export interface PriceBreakdown {
-  item: Item['name']
-  quantity: number
-  price: number
 }
 
 interface VatApplied {
@@ -58,66 +53,70 @@ export default class InMemoryCart implements Cart {
     }
   }
 
+  getItems(): ItemCollection {
+    return this.items
+  }
+
   produceOutput(): CartOutput {
-    const { discountsApplied, leftoverItems, processedItems } = this.applyDiscounts()
+    const { offersApplied, leftoverItems, processedItems } = this.applyOffers()
     const subtotal = this.tallyUp(leftoverItems) + this.tallyUp(processedItems)
     const vatApplied = this.applyVat(subtotal)
 
     return {
       items: this.items,
-      discountsApplied,
+      offersApplied,
       vatApplied,
       total: subtotal + vatApplied.amount,
     }
   }
 
-  private applyDiscounts(): {
-    discountsApplied: DiscountApplied[]
+  private applyOffers(): {
+    offersApplied: OfferApplied[]
     processedItems: ItemCollection
     leftoverItems: ItemCollection
   } {
     const processedItems: ItemCollection = {}
     const leftoverItems: ItemCollection = JSON.parse(JSON.stringify(this.items))
-    const discountsApplied: DiscountApplied[] = []
+    const offersApplied: OfferApplied[] = []
 
-    for (const discount of this.options.discounts) {
-      const isSelfDiscount = discount.requiredItem === discount.discountedItem
+    for (const offer of this.options.offers) {
+      const isSelfOffer = offer.requiredItem === offer.itemOnOffer
       const hasItem = (collection: ItemCollection, item: Item['name'], quantity: number) =>
         item in collection && collection[item].quantity >= quantity
 
-      const canApplyDiscount = () =>
-        isSelfDiscount
-          ? hasItem(leftoverItems, discount.requiredItem, discount.requiredCount)
-          : hasItem(leftoverItems, discount.requiredItem, discount.requiredCount) &&
-          hasItem(leftoverItems, discount.discountedItem, 1)
+      const canApplyOffer = () =>
+        isSelfOffer
+          ? hasItem(leftoverItems, offer.requiredItem, offer.requiredCount)
+          : hasItem(leftoverItems, offer.requiredItem, offer.requiredCount) &&
+            hasItem(leftoverItems, offer.itemOnOffer, 1)
 
       let amount = 0
-      const newPrice = leftoverItems[discount.discountedItem].price * discount.priceModifier
+      const newPrice = leftoverItems[offer.itemOnOffer].price * offer.priceModifier
 
-      while (canApplyDiscount()) {
-        leftoverItems[discount.requiredItem].quantity -= discount.requiredCount
-        processedItems[discount.requiredItem] = {
-          price: isSelfDiscount ? newPrice : leftoverItems[discount.requiredItem].price,
-          quantity: (processedItems[discount.requiredItem]?.quantity ?? 0) + discount.requiredCount,
+      while (canApplyOffer()) {
+        leftoverItems[offer.requiredItem].quantity -= offer.requiredCount
+        processedItems[offer.requiredItem] = {
+          price: isSelfOffer ? newPrice : leftoverItems[offer.requiredItem].price,
+          quantity: (processedItems[offer.requiredItem]?.quantity ?? 0) + offer.requiredCount,
         }
-        if (!isSelfDiscount) {
-          leftoverItems[discount.discountedItem].quantity -= 1
-          processedItems[discount.discountedItem] = {
+        if (!isSelfOffer) {
+          leftoverItems[offer.itemOnOffer].quantity -= 1
+          processedItems[offer.itemOnOffer] = {
             price: newPrice,
-            quantity: (processedItems[discount.discountedItem]?.quantity ?? 0) + 1,
+            quantity: (processedItems[offer.itemOnOffer]?.quantity ?? 0) + 1,
           }
         }
-        amount += leftoverItems[discount.discountedItem].price - newPrice
+        amount += leftoverItems[offer.itemOnOffer].price - newPrice
       }
 
-      discountsApplied.push({
+      offersApplied.push({
         amount,
-        discount: discount.name,
+        offer: offer.name,
       })
     }
 
     return {
-      discountsApplied,
+      offersApplied,
       processedItems,
       leftoverItems,
     }
