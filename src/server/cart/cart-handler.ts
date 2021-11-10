@@ -13,6 +13,7 @@ export const handlerFactory: CartHandlerFactory =
 
 const handler = (cart: Cart, items: Item[], itemName: Item['name'], quantity: number) => {
   const item = items.find((i) => i.name === itemName)
+  if (!item) throw new Error('item not found')
 
   cart.add(item!, quantity)
 }
