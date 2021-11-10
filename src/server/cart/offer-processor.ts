@@ -48,7 +48,7 @@ export class SimpleOfferProcessor implements OffersProcessor {
         isSelfOffer
           ? hasItem(leftoverItems, offer.requiredItem, offer.requiredCount)
           : hasItem(leftoverItems, offer.requiredItem, offer.requiredCount) &&
-          hasItem(leftoverItems, offer.itemOnOffer, 1)
+            hasItem(leftoverItems, offer.itemOnOffer, 1)
 
       let amount = 0
       const newPrice = leftoverItems[offer.itemOnOffer].price * offer.priceModifier
