@@ -118,8 +118,8 @@ describe('In Memory Cart', () => {
       sut.add(item3, 3)
 
       expect(sut.produceOutput().discountsApplied).toEqual([
-        { discount: discount1.name, amount: 100 },
-        { discount: discount2.name, amount: 30 },
+        { discount: discount1.name, amount: 100 * 2 * 0.5 },
+        { discount: discount2.name, amount: 100 * 3 * 0.1 },
       ])
       expect(sut.produceOutput().total).toEqual(
         item1.price * 5 + item2.price + item2.price * 2 * 0.5 + item3.price * 3 * 0.9,
