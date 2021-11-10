@@ -1,0 +1,33 @@
+{
+  "name": "shop",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint '**/*.ts?(x)' --color --ignore-path .gitignore --cache",
+    "lint:fix": "eslint '**/*.ts?(x)' --color --ignore-path .gitignore --cache --fix",
+    "test": "jest"
+  },
+  "dependencies": {
+    "next": "12.0.3",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.11.6",
+    "@types/react": "^17.0.34",
+    "@types/react-dom": "^17.0.11",
+    "@types/supertest": "^2.0.11",
+    "eslint": "7.32.0",
+    "eslint-config-next": "12.0.3",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.26.1",
+    "jest": "^27.3.1",
+    "prettier": "^2.4.1",
+    "supertest": "^6.1.6",
+    "typescript": "4.4.4"
+  }
+}
