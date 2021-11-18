@@ -24,7 +24,7 @@ module.exports = commonSettings
 //   testEnvironment: 'jsdom',
 // }
 //
-// switch (process.env.TEST_MODE) {
+ma// switch (process.env.TEST_MODE) {
 //   case 'server':
 //     module.exports = { ...commonSettings, projects: [serverTests] }
 //     break
